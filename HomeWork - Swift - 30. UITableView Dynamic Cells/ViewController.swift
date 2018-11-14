@@ -10,12 +10,21 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource {
     
+    @IBOutlet weak var tableView: UITableView!
+    
+    
     //MARK: - Global variables
     
     var arrayOfArrays = [[(String, Int)]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // отступ сверху
+        let insets = UIEdgeInsets.init(top: 10, left: 0, bottom: 0, right: 0)
+        self.tableView.contentInset = insets
+        self.tableView.scrollIndicatorInsets = insets
+        
         var studentArray = [(String, Int)]()
         var perfectStudent = [(String, Int)]()
         var goodStudent = [(String, Int)]()
@@ -23,7 +32,7 @@ class ViewController: UIViewController, UITableViewDataSource {
         var badStudent = [(String, Int)]()
         
         for _ in 1...100 {
-            studentArray.append((randomName(), randomMark()))
+            studentArray.append(("\(randomName()) \(randomName())", randomMark()))
         }
         for (name, mark) in studentArray {
             if mark == 2 {
@@ -117,37 +126,57 @@ class ViewController: UIViewController, UITableViewDataSource {
         return indexPath.section < 4 ? cell! : cell2!
     }
     //MARK: - Functions
+    
+    func formatString(places:CGFloat) -> String{
+        let aStr = String(format: "%05.3f", places)
+        return aStr
+    }
     func randomColor () -> UIColor{
         let r = CGFloat(arc4random()%256) / 255
         let g = CGFloat(arc4random()%256) / 255
         let b = CGFloat(arc4random()%256) / 255
         return UIColor(red: r, green: g, blue: b, alpha: 1)
     }
-    func formatString(places:CGFloat) -> String{
-        let aStr = String(format: "%05.3f", places)
-        return aStr
-    }
     func randomMark () -> Int {
         let mark = Int(arc4random()%4) + 2
         return mark
     }
     func randomName () -> String {
+        
         func randomLoud () -> Int {
             return Int(arc4random()%21)
         }
         func randomVowels () -> Int {
             return Int(arc4random()%5)
         }
+        func randomAlphabet () -> Int {
+            return Int(arc4random()%26)
+        }
         var name = ""
         var arrayLoud = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
-        var arrayVoweld = ["a", "e", "i", "o", "u"]
+        var arrayVowels = ["a", "e", "i", "o", "u"]
+        var arrayAlphabet = [String]()
+        arrayAlphabet += arrayVowels
+        arrayAlphabet += arrayLoud
         
-        for i in 0..<8 {
-            if i%2 == 0 {
-                name.append(arrayLoud[randomLoud()])
-            } else if i%2 == 1 {
-                name.append(arrayVoweld[randomVowels()])
+        for i in 2..<10 {
+            if i == 2 {
+                name.append(arrayAlphabet[randomAlphabet()])
             }
+            if (name.hasPrefix("a") || name.hasPrefix("e") || name.hasPrefix("i") || name.hasPrefix("o") || name.hasPrefix("u")) {
+                if i % 2 == 0 {
+                    name.append(arrayLoud[randomLoud()])
+                } else if i%2 == 1 {
+                    name.append(arrayVowels[randomVowels()])
+                }
+            } else {
+                if i % 2 == 1 {
+                    name.append(arrayLoud[randomLoud()])
+                } else if i%2 == 0 {
+                    name.append(arrayVowels[randomVowels()])
+                }
+            }
+            
         }
         return name.capitalized
     }
