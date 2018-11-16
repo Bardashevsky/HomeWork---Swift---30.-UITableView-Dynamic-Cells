@@ -143,40 +143,24 @@ class ViewController: UIViewController, UITableViewDataSource {
     }
     func randomName () -> String {
         
-        func randomLoud () -> Int {
-            return Int(arc4random()%21)
-        }
-        func randomVowels () -> Int {
-            return Int(arc4random()%5)
-        }
-        func randomAlphabet () -> Int {
-            return Int(arc4random()%26)
+        func randomLetter(count: Int) -> Int {
+            return Int(arc4random())%count
         }
         var name = ""
         var arrayLoud = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
-        var arrayVowels = ["a", "e", "i", "o", "u"]
-        var arrayAlphabet = [String]()
-        arrayAlphabet += arrayVowels
+        var arrayVowels = ["a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u"]
+        var arrayAlphabet = arrayVowels
         arrayAlphabet += arrayLoud
         
         for i in 2..<10 {
             if i == 2 {
-                name.append(arrayAlphabet[randomAlphabet()])
+                name.append(arrayAlphabet[randomLetter(count: arrayAlphabet.count)])
             }
             if (name.hasPrefix("a") || name.hasPrefix("e") || name.hasPrefix("i") || name.hasPrefix("o") || name.hasPrefix("u")) {
-                if i % 2 == 0 {
-                    name.append(arrayLoud[randomLoud()])
-                } else if i%2 == 1 {
-                    name.append(arrayVowels[randomVowels()])
-                }
+                name.append(i % 2 == 0 ? arrayLoud[randomLetter(count: arrayLoud.count)] : arrayVowels[randomLetter(count: arrayVowels.count)])
             } else {
-                if i % 2 == 1 {
-                    name.append(arrayLoud[randomLoud()])
-                } else if i%2 == 0 {
-                    name.append(arrayVowels[randomVowels()])
-                }
+                name.append(i % 2 == 1 ? arrayLoud[randomLetter(count: arrayLoud.count)] : arrayVowels[randomLetter(count: arrayVowels.count)])
             }
-            
         }
         return name.capitalized
     }
